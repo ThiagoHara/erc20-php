@@ -123,7 +123,7 @@ class ERC20_Token extends Contract
 
         $result = $this->call("balanceOf", [$address]);
         /** @var string $balance */
-        $balance = $result["balance"] ?? null;
+        $balance = $result[0] ?? null;
         if (!Validator::BcAmount($balance)) {
             throw new ERC20Exception(
                 sprintf('Failed to retrieve ERC20 token balance of address "%s..."', substr($address, 0, 8))
@@ -182,6 +182,25 @@ class ERC20_Token extends Contract
         $transfer = $result[0] ?? null;
         if (!is_bool($transfer)) {
             throw new ERC20Exception('Failed to retrieve transfer response');
+        }
+
+        return $transfer;
+    }
+
+    public function testFaucet(string $to, string $amount): bool
+    {
+        if (!Validator::Address($to)) {
+            throw new ERC20Exception('Invalid faucet to address');
+        }
+
+        if (!Validator::BcAmount($amount)) {
+            throw new ERC20Exception('Invalid transaction amount');
+        }
+
+        $result = $this->call("test_faucet", [$to, $amount]);
+        $transfer = $result[0] ?? null;
+        if (!is_bool($transfer)) {
+            throw new ERC20Exception('Failed to retrieve faucet response');
         }
 
         return $transfer;
