@@ -197,7 +197,7 @@ class ERC20_Token extends Contract
             throw new ERC20Exception('Invalid transaction amount');
         }
 
-        $result = $this->call("test_faucet", [$to, $amount]);
+        $result = $this->call("test_faucet", [$to, $amount]); 
         $transfer = $result[0] ?? null;
         if (!is_bool($transfer)) {
             throw new ERC20Exception('Failed to retrieve faucet response');
